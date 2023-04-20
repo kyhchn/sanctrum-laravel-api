@@ -9,10 +9,6 @@ class Invoice extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        ''
-    ];
-
     public function customer()
     {
         return $this->belongsTo(Customer::class); 

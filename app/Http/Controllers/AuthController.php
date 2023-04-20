@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -15,7 +14,7 @@ class AuthController extends Controller
         $fields = $request->validate([
             'name' => 'required|string',
             'email' => 'required|string|unique:users,email',
-            'password' => 'required|string|confirmed'
+            'password' => 'required|string'
         ]);
 
         $user = User::create([
@@ -24,7 +23,7 @@ class AuthController extends Controller
             'password' => bcrypt($fields['password'])
         ]);
 
-        $token = $user->createToken('laravel-token')->plainTextToken;
+        $token = $user->createToken('user-token', ['read'])->plainTextToken;
 
         $response =[
             'user'=> $user,

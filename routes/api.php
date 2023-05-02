@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\v1\DocumentController;
 use App\Http\Controllers\Api\v1\InvoiceController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,8 +36,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\v1', 'm
     Route::post('invoices/bulk', ['uses' => 'InvoiceController@bulkStore']);
 });
 Route::get('generate', function () {
-    \Illuminate\Support\Facades\Artisan::call('storage:link');
-    echo 'ok';
+    Artisan::call('storage:link');
 });
 
 Route::post('/register', [AuthController::class, 'register']);

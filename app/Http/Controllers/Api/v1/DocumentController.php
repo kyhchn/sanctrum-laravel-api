@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Document;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class DocumentController extends Controller
 {
@@ -32,16 +31,28 @@ class DocumentController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['pdf' => 'required|mimes:pdf,doc,docx,pptx']);
-        $file = $request->file('pdf');
-        if ($file) {
+        $request->validate(['type' => 'required|in:document,video', 'document' => 'mimes:pdf,doc,docx,pptx', 'video' => 'mimes:mp4']);
+
+        if ($request->type == 'document' && $request->file('document')) {
+            $file = $request->file('document');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('uploads', $filename, 'public');
+            $filePath = $file->storeAs('uploads/document', $filename, 'public');
             $document = new Document;
+            $document->type = $request->type;
             $document->name = $file->getClientOriginalName();
             $document->file_path = '/storage/' . $filePath;
             $document->save();
             return ['status' => 'success', 'document' => $document];
+        } else if ($request->type == 'video' && $request->file('video')) {
+            $file = $request->file('video');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('uploads/video', $filename, 'public');
+            $document = new Document;
+            $document->type = $request->type;
+            $document->name = $file->getClientOriginalName();
+            $document->file_path = '/storage/' . $filePath;
+            $document->save();
+            return ['status' => 'success', 'video' => $document];
         }
         return ['status' => 'failed'];
     }

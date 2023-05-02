@@ -34,6 +34,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\v1', 'm
     Route::apiResource('documents', DocumentController::class);
     Route::post('invoices/bulk', ['uses' => 'InvoiceController@bulkStore']);
 });
+Route::get('generate', function () {
+    \Illuminate\Support\Facades\Artisan::call('storage:link');
+    echo 'ok';
+});
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);

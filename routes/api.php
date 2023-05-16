@@ -37,10 +37,12 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\v1', 'm
 });
 Route::get('generate', function () {
     Artisan::call('storage:link');
+    echo "ok";
 });
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/upload', [DocumentController::class, 'testSupabase']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
 

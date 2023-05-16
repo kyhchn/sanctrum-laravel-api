@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Document;
 use Illuminate\Http\Request;
+use Supabase\Storage\StorageClient;
 
 class DocumentController extends Controller
 {
@@ -29,10 +30,16 @@ class DocumentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+    public function testSupabase(Request $request)
+    {
+        $client = new StorageClient('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZxZGZrY2xnZWZhaWxqd3hxamNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODMxMjI1ODUsImV4cCI6MTk5ODY5ODU4NX0.3ZxwEv_hD13xVSX6aCoWS8l1MZy33Y-uRwRhlSGn3_k', 'vqdfkclgefailjwxqjch');
+        $response = $client->getBucket('document');
+        return ['data' => $response];
+    }
     public function store(Request $request)
     {
         $request->validate(['type' => 'required|in:document,video', 'document' => 'mimes:pdf,doc,docx,pptx', 'video' => 'mimes:mp4']);
-
         if ($request->type == 'document' && $request->file('document')) {
             $file = $request->file('document');
             $filename = time() . '_' . $file->getClientOriginalName();
